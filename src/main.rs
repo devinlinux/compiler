@@ -17,13 +17,13 @@ fn main() {
 
         .subcommand(
             Command::new("repl")
-            .short_flag('R')
+            .short_flag('r')
             .long_flag("repl")
             .about("Read Evaluate Print Loop")
         )
         .subcommand(
             Command::new("file")
-            .short_flag('F')
+            .short_flag('f')
             .long_flag("file")
             .about("Compile a file")
             .arg(
