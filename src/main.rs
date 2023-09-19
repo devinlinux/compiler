@@ -1,7 +1,8 @@
 mod lexer;
 
-use std::io::{ Write, BufRead };
-use clap::Command;
+use std::io::{ Write, BufRead, BufReader };
+use std::fs::File;
+use clap::{ Command, Arg, ArgAction };
 
 use crate::lexer::{ Lexer, Token };
 
@@ -25,14 +26,25 @@ fn main() {
             .short_flag('F')
             .long_flag("file")
             .about("Compile a file")
+            .arg(
+                Arg::new("path")
+                .help("the path to the file to compiler")
+                .required(true)
+                .action(ArgAction::Set)
+                .num_args(1)
+            )
         )
         .get_matches();
 
     match matches.subcommand() {
         Some(("repl", _)) => {
             repl().expect("Failed to run repl");
-        }
-        _ => {}
+        },
+        Some(("file", file_matches)) => {
+            let path: &String = file_matches.get_one("path").expect("is present");
+            compile_file(path.to_string()).expect("Failed to copmile file");
+        },
+        _ => unreachable!(),
     }
 }
 
@@ -65,6 +77,25 @@ fn repl() -> std::io::Result<()> {
     Ok(())
 }
 
-fn compile_file() {
+fn compile_file(file: String) -> std::io::Result<()> {
+    let file = File::open(file)?;
+    let reader = BufReader::new(file);
 
+    for line in reader.lines() {
+        match line {
+            Ok(line) => {
+                let mut lexer = Lexer::new(String::from(line));
+                loop {
+                    let token = lexer.next();
+                    println!("{}", token);
+                    if let Token::Eof = token {
+                        break;
+                    }
+                }
+            },
+            Err(err) => eprintln!("Error reading line: {}", err),
+        }
+    }
+
+    Ok(())
 }

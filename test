@@ -1,0 +1,10 @@
+const x: i32 = 0;
+const y: i32 = 0;
+
+const add = fn(x: i32, y: i32) -> i32 {
+    return x + y;
+}
+
+const sum: i32 = add(x, y);
+
+const z: f32 = 4.2;
