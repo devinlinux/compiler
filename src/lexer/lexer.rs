@@ -142,10 +142,6 @@ impl Lexer {
             self.input[self.read_pos]
         }
     }
-
-    fn has_tokens(&self) -> bool {
-        self.ch != 0
-    }
 }
 
 fn is_valid_var_char(ch: u8) -> bool {
