@@ -8,7 +8,7 @@ use crate::lexer::{ Lexer, Token };
 
 
 fn main() {
-    let matches = Command::new("compiler")
+    let matches = Command::new("indomitus")
         .about("An experimental compiler")
         .version("0.4.0")
         .subcommand_required(true)
