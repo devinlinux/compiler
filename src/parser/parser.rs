@@ -53,10 +53,7 @@ impl Parser {
         }
 
         let name = match self.curr_tkn.clone() {
-            Token::Ident(value) => ast::Identifier {
-                token: self.curr_tkn.clone(),
-                value,
-            },
+            Token::Ident(value) => ast::Identifier::new(self.curr_tkn.clone(), value),
             _ => unreachable!(),
         };
 
