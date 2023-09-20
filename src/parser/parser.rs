@@ -112,6 +112,10 @@ fn parse_let_statements_test() {
 
     let program = parser.parse_program();
 
+    if program.statements.len() != 2 {
+        panic!("Incorrect number of statements");
+    }
+
     let statements: Vec<ast::Statement> = vec![
         ast::Statement::Let(ast::LetStatement::new(ast::Identifier::new(Token::Ident(String::from("x")), String::from("x")))),
         ast::Statement::Let(ast::LetStatement::new(ast::Identifier::new(Token::Ident(String::from("y")), String::from("y")))),
@@ -122,8 +126,8 @@ fn parse_let_statements_test() {
         let got = program.statements.get(i);
         i += 1;
 
-        println!("expected: {:?}, got: {:?}", statement, got);
-        assert_eq!(Some(&statement), got);
+        println!("expected: {}, got: {}", statement, got.unwrap());
+        assert_eq!(&statement, got.unwrap());
     }
 }
 
