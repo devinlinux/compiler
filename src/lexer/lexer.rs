@@ -153,7 +153,7 @@ fn is_valid_num_char(ch: u8) -> bool {
 }
 
 #[test]
-fn text_next_token() -> Result<(), ()> {
+fn text_next_token() {
     let input = r#"
         const x: i32 = 5;
         const y: f64 = 4.2;
@@ -212,6 +212,4 @@ fn text_next_token() -> Result<(), ()> {
         println!("expected: {}, received: {}", token, next_token);
         assert_eq!(token, next_token);
     }
-
-    Ok(())
 }
