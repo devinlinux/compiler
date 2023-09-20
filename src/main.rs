@@ -1,4 +1,5 @@
 mod lexer;
+mod parser;
 
 use std::io::{ Write, BufRead, BufReader };
 use std::fs::File;
