@@ -64,8 +64,8 @@ impl Parser {
             return None;
         }
 
-        // TODO: Do expressions, currently skipping until semicolon is encountered
-
+        //  TODO: Do expressions, currently skipping until semicolon is encountered
+        //  TODO: types
         while !self.curr_tok_is(&Token::Semicolon) {
             self.next();
         }
@@ -98,6 +98,32 @@ impl Parser {
         } else {
             false
         }
+    }
+}
+
+#[test]
+fn parse_let_statements_test() {
+    let input = r#"
+        const x = 5;
+        var y = 5.4;
+        "#;
+    let lexer = Lexer::new(input.to_string());
+    let mut parser = Parser::new(lexer);
+
+    let program = parser.parse_program();
+
+    let statements: Vec<ast::Statement> = vec![
+        ast::Statement::Let(ast::LetStatement::new(ast::Identifier::new(Token::Ident(String::from("x")), String::from("x")))),
+        ast::Statement::Let(ast::LetStatement::new(ast::Identifier::new(Token::Ident(String::from("y")), String::from("y")))),
+    ];
+
+    let mut i: usize = 0;
+    for statement in statements {
+        let got = program.statements.get(i);
+        i += 1;
+
+        println!("expected: {:?}, got: {:?}", statement, got);
+        assert_eq!(Some(&statement), got);
     }
 }
 
