@@ -146,3 +146,35 @@ fn parse_let_statements_test() {
     }
 }
 
+#[test]
+fn parse_return_statements_test() {
+    let input = r#"
+        return 5;
+        return true;
+        "#;
+    let lexer = Lexer::new(input.to_string());
+    let mut parser = Parser::new(lexer);
+
+    let program = parser.parse_program();
+
+    assert_eq!(parser.errors.len(), 0);
+
+    if program.statements.len() != 2 {
+        panic!("Incorrect number of statements");
+    }
+
+    let statements: Vec<ast::Statement> = vec![
+        ast::Statement::Return(ast::ReturnStatement::new()),
+        ast::Statement::Return(ast::ReturnStatement::new()),
+    ];
+
+    let mut i: usize = 0;
+    for statement in statements {
+        let got = program.statements.get(i);
+        i += 1;
+
+        //println!("expected: {}, got: {}", statement, got.unwrap());
+        assert_eq!(&statement, got.unwrap());
+    }
+}
+
