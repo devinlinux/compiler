@@ -43,12 +43,14 @@ impl ParserErrors {
 
 #[derive(Debug)]
 pub enum ParserError {
+    IdentifierExpected,
     PeekError(Token, Token),
 }
 
 impl Display for ParserError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
+            ParserError::IdentifierExpected => write!(f, "Identifier expected"),
             ParserError::PeekError(expected, got) => write!(f, "Expected: {}, Got: {} instead", expected, got),
         }
     }

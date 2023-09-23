@@ -52,6 +52,7 @@ impl Parser {
 
     fn parse_let_stmt(&mut self) -> Option<ast::LetStatement> {
         if !self.expect_peek(&Token::Ident(String::new())) {
+            self.errors.push_err(ParserError::IdentifierExpected);
             return None;
         }
 
