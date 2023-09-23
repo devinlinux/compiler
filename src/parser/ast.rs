@@ -18,6 +18,7 @@ impl Program {
 #[derive(Debug, PartialEq)]
 pub enum Statement {
     Let(LetStatement),
+    Return(ReturnStatement),
 }
 
 impl Display for Statement {
@@ -51,6 +52,31 @@ impl LetStatement {
         LetStatement {
             name,
             value: Expression::Blank,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct ReturnStatement {
+    pub return_value: Expression,
+}
+
+impl Display for ReturnStatement {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "return value: {}", self.return_value)
+    }
+}
+
+impl PartialEq for ReturnStatement {
+    fn eq(&self, other: &Self) -> bool {
+        self.return_value == other.return_value
+    }
+}
+
+impl ReturnStatement {
+    pub fn new() -> ReturnStatement {
+        ReturnStatement {
+            return_value: Expression::Blank,
         }
     }
 }

@@ -45,6 +45,7 @@ impl Parser {
     fn parse_statement(&mut self) -> Option<ast::Statement> {
         return match self.curr_tkn {
             Token::Var | Token::Const => self.parse_let_stmt().map(ast::Statement::Let),
+            Token::Return => self.parse_return_stmt().map(ast::Statement::Return),
             _ => None,
         };
     }
@@ -71,6 +72,18 @@ impl Parser {
         }
 
         Some(ast::LetStatement::new(name))
+    }
+
+    fn parse_return_stmt(&mut self) -> Option<ast::ReturnStatement> {
+        let stmt = ast::ReturnStatement::new();
+        self.next();
+
+        //  TODO: Do expressions, currently skipping until semicolon is encountered
+        while !self.curr_tok_is(&Token::Semicolon) {
+            self.next();
+        }
+
+        Some(stmt)
     }
 
     fn curr_tok_is(&self, token: &Token) -> bool {
