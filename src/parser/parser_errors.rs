@@ -1,9 +1,11 @@
 use std::error::Error;
 use std::fmt::{ Display, Formatter };
 
+use crate::lexer::Token;
+
 #[derive(Debug, Default)]
 pub struct ParserErrors {
-    pub errors: Vec<String>,
+    pub errors: Vec<ParserError>,
 }
 
 impl Error for ParserErrors {
@@ -26,12 +28,25 @@ impl ParserErrors {
         }
     }
 
-    pub fn push_err(&mut self, err: String) {
+    pub fn push_err(&mut self, err: ParserError) {
         self.errors.push(err);
     }
 
-    pub fn append_errs(&mut self, mut errors: Vec<String>) {
+    pub fn append_errs(&mut self, mut errors: Vec<ParserError>) {
         self.errors.append(&mut errors);
+    }
+}
+
+#[derive(Debug)]
+pub enum ParserError {
+    PeekError(Token, Token),
+}
+
+impl Display for ParserError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ParserError::PeekError(expected, got) => write!(f, "Expected: {}, Got: {} instead", expected, got),
+        }
     }
 }
 

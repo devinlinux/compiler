@@ -1,11 +1,12 @@
 use crate::lexer::Lexer;
 use crate::lexer::Token;
-use crate::parser::ast;
+use crate::parser::{ ast, parser_errors::{ ParserErrors, ParserError } };
 
 pub struct Parser {
     lexer: Lexer,
     curr_tkn: Token,
     peek_tkn: Token,
+    errors: ParserErrors
 }
 
 impl Parser {
@@ -14,6 +15,7 @@ impl Parser {
             lexer,
             curr_tkn: Token::Illegal(0),
             peek_tkn: Token::Illegal(0),
+            errors: ParserErrors::default(),
         };
 
         parser.next();
@@ -58,7 +60,9 @@ impl Parser {
         };
 
         if !self.expect_peek(&Token::Assign) {
-            return None;
+            self.errors.push_err(ParserError::PeekError(Token::Assign, self.peek_tkn.clone()));
+            println!("{}", self.errors);
+            std::process::exit(1);
         }
 
         //  TODO: Do expressions, currently skipping until semicolon is encountered
