@@ -61,8 +61,7 @@ impl Parser {
 
         if !self.expect_peek(&Token::Assign) {
             self.errors.push_err(ParserError::PeekError(Token::Assign, self.peek_tkn.clone()));
-            println!("{}", self.errors);
-            std::process::exit(1);
+            return None;
         }
 
         //  TODO: Do expressions, currently skipping until semicolon is encountered
@@ -105,13 +104,15 @@ impl Parser {
 #[test]
 fn parse_let_statements_test() {
     let input = r#"
-        const x = 5;
+        const x = 7;
         var y = 5.4;
         "#;
     let lexer = Lexer::new(input.to_string());
     let mut parser = Parser::new(lexer);
 
     let program = parser.parse_program();
+
+    assert_eq!(parser.errors.len(), 0);
 
     if program.statements.len() != 2 {
         panic!("Incorrect number of statements");
@@ -127,7 +128,7 @@ fn parse_let_statements_test() {
         let got = program.statements.get(i);
         i += 1;
 
-        println!("expected: {}, got: {}", statement, got.unwrap());
+        //println!("expected: {}, got: {}", statement, got.unwrap());
         assert_eq!(&statement, got.unwrap());
     }
 }

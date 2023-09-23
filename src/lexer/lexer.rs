@@ -209,7 +209,7 @@ fn text_next_token() {
 
     for token in tokens {
         let next_token = lex.next();
-        println!("expected: {}, received: {}", token, next_token);
+        //println!("expected: {}, received: {}", token, next_token);
         assert_eq!(token, next_token);
     }
 }

@@ -35,6 +35,10 @@ impl ParserErrors {
     pub fn append_errs(&mut self, mut errors: Vec<ParserError>) {
         self.errors.append(&mut errors);
     }
+
+    pub fn len(&self) -> usize {
+        self.errors.len()
+    }
 }
 
 #[derive(Debug)]
