@@ -44,13 +44,13 @@ impl Parser {
 
     fn parse_statement(&mut self) -> Option<ast::Statement> {
         return match self.curr_tkn {
-            Token::Var | Token::Const => self.parse_let_stmt().map(ast::Statement::Let),
+            Token::Var | Token::Const => self.parse_let_stmt(self.curr_tkn.clone()).map(ast::Statement::Let),
             Token::Return => self.parse_return_stmt().map(ast::Statement::Return),
             _ => None,
         };
     }
 
-    fn parse_let_stmt(&mut self) -> Option<ast::LetStatement> {
+    fn parse_let_stmt(&mut self, modifier: Token) -> Option<ast::LetStatement> {
         if !self.expect_peek(&Token::Ident(String::new())) {
             self.errors.push_err(ParserError::IdentifierExpected);
             return None;
@@ -72,7 +72,7 @@ impl Parser {
             self.next();
         }
 
-        Some(ast::LetStatement::new(name))
+        Some(ast::LetStatement::new(modifier, name))
     }
 
     fn parse_return_stmt(&mut self) -> Option<ast::ReturnStatement> {
@@ -126,6 +126,8 @@ fn parse_let_statements_test() {
 
     let program = parser.parse_program();
 
+    println!("{program}");
+
     assert_eq!(parser.errors.len(), 0);
 
     if program.statements.len() != 2 {
@@ -133,8 +135,8 @@ fn parse_let_statements_test() {
     }
 
     let statements: Vec<ast::Statement> = vec![
-        ast::Statement::Let(ast::LetStatement::new(ast::Identifier::new(Token::Ident(String::from("x")), String::from("x")))),
-        ast::Statement::Let(ast::LetStatement::new(ast::Identifier::new(Token::Ident(String::from("y")), String::from("y")))),
+        ast::Statement::Let(ast::LetStatement::new(Token::Const, ast::Identifier::new(Token::Ident(String::from("x")), String::from("x")))),
+        ast::Statement::Let(ast::LetStatement::new(Token::Var, ast::Identifier::new(Token::Ident(String::from("y")), String::from("y")))),
     ];
 
     let mut i: usize = 0;
@@ -157,6 +159,8 @@ fn parse_return_statements_test() {
     let mut parser = Parser::new(lexer);
 
     let program = parser.parse_program();
+
+    println!("{program}");
 
     assert_eq!(parser.errors.len(), 0);
 
