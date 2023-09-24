@@ -136,3 +136,20 @@ impl Identifier {
     }
 }
 
+#[test]
+fn test_string_conversion() {
+    let program: Program = Program::new(
+        vec![
+            Statement::Let(LetStatement::new(
+                Token::Const,
+                Identifier::new(Token::Ident(String::from("x")), String::from("x")),
+            )),
+            Statement::Let(LetStatement::new(
+                Token::Var,
+                Identifier::new(Token::Ident(String::from("y")), String::from("y")),
+            )),
+        ],
+    );
+
+    assert_eq!(program.to_string(), "const x = Expression;\nvar y = Expression;\n");
+}
